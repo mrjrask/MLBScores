@@ -1,3 +1,4 @@
+
 const NodeHelper = require("node_helper");
 const axios = require("axios");
 
@@ -6,37 +7,21 @@ module.exports = NodeHelper.create({
         console.log("Starting node helper for: " + this.name);
     },
 
-    socketNotificationReceived: function (notification, payload) {
+    socketNotificationReceived: function (notification, proxyUrl) {
         if (notification === "GET_MLB_SCORES") {
-            this.getMLBScores();
+            this.getMLBScores(proxyUrl);
         }
     },
 
-    getMLBScores: function () {
-        const url = "http://site.api.espn.com/apis/site/v2/sports/baseball/mlb/scoreboard";
-        axios.get(url)
+    getMLBScores: function (proxyUrl) {
+        axios.get(proxyUrl)
             .then((response) => {
-                const games = response.data.events.map((event) => {
-                    return {
-                        team1: {
-                            name: event.competitions[0].competitors[0].team.shortDisplayName,
-                            logo: event.competitions[0].competitors[0].team.logo,
-                            score: event.competitions[0].competitors[0].score,
-                        },
-                        team2: {
-                            name: event.competitions[0].competitors[1].team.shortDisplayName,
-                            logo: event.competitions[0].competitors[1].team.logo,
-                            score: event.competitions[0].competitors[1].score,
-                        },
-                        inning: event.status.period,
-                        baserunners: event.competitions[0].situation.baserunners,
-                        outs: event.competitions[0].situation.outs,
-                    };
-                });
-                this.sendSocketNotification("MLB_SCORES_RESULT", games);
+                // Send the parsed scores back to the front-end
+                this.sendSocketNotification("MLB_SCORES_RESULT", response.data);
             })
             .catch((error) => {
-                console.log("Error fetching MLB scores: " + error);
+                console.log("Error fetching MLB scores from proxy: ", proxyUrl, error);
+                this.sendSocketNotification("PROXY_ERROR");  // Notify front-end to try another proxy
             });
     }
 });
