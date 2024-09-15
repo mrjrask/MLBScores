@@ -1,0 +1,57 @@
+.MMM-MLBScores {
+    width: 100%;
+    max-width: 550px;
+    color: white;
+    font-family: sans-serif;
+}
+
+.game {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #666;
+}
+
+.team-logo {
+    display: flex;
+    align-items: center;
+}
+
+.team-logo img {
+    width: 40px;
+    height: 40px;
+    margin-right: 10px;
+}
+
+.team-name {
+    margin-right: 5px;
+    font-weight: bold;
+}
+
+.score {
+    font-size: 24px;
+}
+
+.inning-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.bases {
+    display: flex;
+    justify-content: space-around;
+    width: 50px;
+}
+
+.base {
+    width: 10px;
+    height: 10px;
+    background-color: gray;
+    border-radius: 50%;
+}
+
+.base.occupied {
+    background-color: green;
+}
